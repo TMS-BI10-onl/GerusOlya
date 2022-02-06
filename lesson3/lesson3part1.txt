@@ -1,0 +1,77 @@
+Задание 2.
+- Вывести список цен в виде текстового комментария, основанного на диапазоне цен для продукта:
+StandardCost равен 0 или не определен – ‘Not for sale’  
+StandardCost больше 0, но меньше 100 – ‘<$100’ 
+StandardCost больше или равно 100, но меньше 500 - ‘ <$500' 
+Иначе - ‘ >= $500'
+Вывести имя продукта и новое поле PriceRange.
+
+SELECT Name, 
+     CASE 
+	 WHEN StandardCost=0 OR StandardCost IS NULL THEN 'Not for sale'
+	 WHEN StandardCost>0 AND StandardCost<100 THEN '<$100'
+	 WHEN StandardCost>=0 AND StandardCost<=500 THEN '<$500'
+	 ELSE '>= $500'
+END PriceRange
+FROM AdventureWorks2017.Production.Product
+
+- Найти ProductID, BusinessEntityID и имя поставщика продукции из Purchasing.ProductVendor и Purchasing.Vendor, где StandardPrice больше $10. Также в имени вендора должна присутствовать (вне зависимости от положения) буква X или имя должно начинаться на букву N.
+
+SELECT pv.BusinessEntityID, pv.Name, pp.ProductID, pp.BusinessEntityID 
+FROM Purchasing.ProductVendor pp
+JOIN Purchasing.Vendor pv
+ON pv.BusinessEntityID=pp.BusinessEntityID 
+WHERE pv.Name LIKE '%X%' 
+OR pv.Name LIKE 'N%'
+AND pp.StandardPrice>10
+
+-Найти имена всех вендоров, продукция которых не продавалась за всё время. Необходимо использовать следующую схему соединения таблиц Purchasing.ProductVendor и Purchasing.Vendor
+
+SELECT Name, pv.BusinessEntityID, pp.ProductID, pp.BusinessEntityID  
+FROM Purchasing.ProductVendor pp
+LEFT JOIN Purchasing.Vendor pv
+ON pv.BusinessEntityID=pp.BusinessEntityID 
+WHERE pp.OnOrderQty IS NULL 
+
+
+
+Задание 3.
+1)Найдите производителей, препараты которых не продавались в 2019 году (подсказка: для выделения года из даты надо использовать одну из функций для работы с датами).
+
+SELECT фп наименование as Наименование производителя, FORMAT (кч дата, 'yyyy') as Год 
+FROM фирмы-производители пр
+JOIN фармпрепараты ф ON пр id= ф id 
+JOIN продажи п ON ф id=пр id
+JOIN кассовые чеки кч ON п id=кч id
+WHERE FORMAT(кч дата, 'yyyy') !=2019
+ORDER BY фп наименование 
+
+2)Выведите увеличенную в 2 раза цену препаратов типа А.
+SELECT ф наименование as Наименование препарата , фп цена*2 as увелич.цена
+FROM фирмы-производители пр
+JOIN фармпрепараты ф ON пр id= ф id 
+JOIN типы фармпрепаратов п ON ф id=тф id
+WHERE тф тип LIKE 'A'
+ORDER BY ф наименование
+
+3)Найдите производителей и кол-во фармпрепаратов для кажого из них, где препарат не относится к типу А.
+SELECT фп наименование as Наименование производителя, COUNT (DISTINCT фп название) as Количество Препаратов 
+FROM фирмы-производители пр
+JOIN фармпрепараты ф ON пр id= ф id 
+JOIN типы фарматпрепаратов тф ON ф id=тф id
+WHERE тф тип != 'A'
+ORDER BY фп наименование 
+
+4)Вывести название аптеки и названия фармпрепаратов, которые в ней продавались по субботам.
+SELECT ап Название as Название аптеки, ф Название as Названия фармпрепаратов
+FROM аптечные пункты ап
+JOIN продажи п ON ап id= п id 
+JOIN фарматпрепараты ф ON п id= ф id 
+JOIN кассовые чеки кч ON ф id=кч id
+WHERE кч дата='Суббота'
+ORDER BY ап Название, ф Название
+
+
+
+
+
