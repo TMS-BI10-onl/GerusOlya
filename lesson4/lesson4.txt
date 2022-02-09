@@ -1,0 +1,94 @@
+3.При каких значениях оконные функции Row Number, Rank и Dense Rank вернут одинаковый результат?
+Если все значения будут без повторов (уникальны).
+ 
+4.
+a)Изучите данные в таблице Production.UnitMeasure. Проверьте, есть ли здесь UnitMeasureCode, начинающиеся на букву ‘Т’. Сколько всего различных кодов здесь есть? 
+Вставьте следующий набор данных в таблицу:
+TT1, Test 1, 9 сентября 2020
+TT2, Test 2, getdate()
+Проверьте теперь, есть ли здесь UnitMeasureCode, начинающиеся на букву ‘Т’. 
+
+SELECT UnitMeasureCode
+FROM Production.UnitMeasure
+WHERE UnitMeasureCode LIKE 'T%'  -- UnitMeasureCode  на букву T нет--
+
+SELECT COUNT(UnitMeasureCode) AS Code_T
+FROM Production.UnitMeasure  --кодов 38--
+
+INSERT INTO Production.UnitMeasure (UnitMeasureCode, Name, ModifiedDate)
+VALUES ('TT1','Test 1','2020-09-09'), ('TT2','Test 2', GETDATE())  -- вставить (TT1,Test 1,2020-09-09) TT2,Test 2,gatedate() --
+
+
+SELECT COUNT(UnitMeasureCode) AS Code_T
+FROM Production.UnitMeasure
+WHERE UnitMeasureCode LIKE 'T%'  -- UnitMeasureCode  на букву T есть 2 шт--
+
+
+B) Теперь загрузите вставленный набор в новую, не существующую таблицу Production.UnitMeasureTest. Догрузите сюда информацию из Production.UnitMeasure по UnitMeasureCode = ‘CAN’.  Посмотрите результат в отсортированном виде по коду. 
+
+SELECT UnitMeasureCode, Name, ModifiedDate
+INTO Production.UnitMeasureTest                                  --новая таблица--
+FROM Production.UnitMeasure 
+
+INSERT INTO Production.UnitMeasureTest (UnitMeasureCode,Name,ModifiedDate)
+SELECT UnitMeasureCode,Name,ModifiedDate
+FROM Production.UnitMeasure
+WHERE UnitMeasureCode = ('CAN')   --подтянуло всю строку с can в новую таблицу--
+
+
+с) Измените UnitMeasureCode для всего набора из Production.UnitMeasureTest на ‘TTT’.
+UPDATE Production.UnitMeasureTest
+SET UnitMeasureCode='TTT'   
+
+d)Удалите все строки из Production.UnitMeasureTest.
+DELETE
+FROM Production.UnitMeasureTest
+
+e)Найдите информацию из Sales.SalesOrderDetail по заказам 43659,43664.  С помощью оконных функций MAX, MIN, AVG найдем агрегаты по LineTotal для каждого SalesOrderID.
+ SELECT DISTINCT SalesOrderID, 
+ MAX(LineTotal) OVER (PARTITION BY SalesOrderID) AS max, 
+ MIN(LineTotal) OVER (PARTITION BY SalesOrderID) as min,
+ AVG(LineTotal) OVER (PARTITION BY SalesOrderID) as avg
+ FROM SALES.SalesOrderDetail
+ WHERE SalesOrderID ='43659'
+ OR SalesOrderID ='43664'
+
+f)Изучите данные в объекте Sales.vSalesPerson. Создайте рейтинг cреди продавцов на основе годовых продаж SalesYTD, используя ранжирующую оконную функцию.
+ SELECT FirstName, SalesYTD
+ ,DENSE_RANK () OVER (ORDER BY SalesYTD DESC) AS 'DENSE_RANK'  
+ FROM sales.vSalesPerson
+
+Добавьте поле Login, состоящий из 3 первых букв фамилии в верхнем регистре + ‘login’ + TerritoryGroup (Null заменить на пустое значение). 
+Кто возглавляет рейтинг? А кто возглавлял рейтинг в прошлом году (SalesLastYear). 
+эту часть не понимаю как сделать( 
+
+
+g)Найдите первый будний день месяца (FROM не используем). Нужен стандартный код на все времена.
+не знаю как это сделать(
+
+
+5.Давайте еще раз остановимся и отточим понимание функции count. Найдите значения count(1), count(name), count(id), count(*) для следующей таблицы:
+Id(PK)	Name		DepName
+1	null		A
+2	null		null
+3	A		C
+4	B		C
+
+count(1) =1
+count(name) =2
+count(id) =4
+count(*) =4
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
