@@ -1,0 +1,16 @@
+Well done!
+
+4.
+a) -0.5
+There was a word "DISTINCT names". You should use COUNT(DISTINCT). In this case the final number is correct, but it's just an occasion.
+b)-0.25
+You needed to insert only 2 rows, not the whole table.
+f)-0.5
+The part about top 1 you already did - for the current year only. It's the row in the select with dense_rank 1. The same should be done to SalesLastYear.
+Creating of new field must be done with functions, as we did on the last lesson.
+g)-2
+No solution.
+5) -0.5
+count(1) is incorrect. We've already done this exercise in the classwork. Go back and find it.
+
+Mark: 6
