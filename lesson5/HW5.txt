@@ -1,0 +1,65 @@
+Задание 6.
+В базе данных AdventureWorks2017 создать таблицу Patients для ведения наблюдений за температурой пациентов больницы. Таблица должна содержать поля:
+ID – числовое поле. Авто заполняется.
+FirstName – имя пациента.
+LastName – фамилия пациента.
+SSN – уникальный идентификатор пациента.
+Email – электронная почта пациента. Формируется по следующему правилу: первая большая буква FirstName + маленькие 3 буквы LastName + @mail.com (например, Akli@mail.com). Полезная ссылка здесь. 
+Temp – температура пациента.
+CreatedDate — дата измерений. 
+
+CREATE TABLE Patients
+            ( Person_id  INT,
+	      FirstName NVARCHAR(100),
+	      LastName NVARCHAR(100),
+	      SSN  UNIQUEIDENTIFIER not null,
+              EMAIL AS TRIM ((UPPER(LEFT(FirstName,1)))+(LOWER(LEFT(LastName,3)))+'@gmail.com'),
+	      Temp FLOAT,
+	      CreatedDate DATE )
+
+Задание 7.
+Добавить в таблицу несколько произвольных записей. 
+
+INSERT INTO Patients (Person_id, FirstName, LastName, SSN, Temp, CreatedDate)
+VALUES
+(1, 'Anna','Ivanova',NEWID(),'37','2022-01-13'),
+(2, 'Olga','Petrova',NEWID(),'38','2022-02-09'),
+(3, 'Oleg','Smirnov',NEWID(),'39','2022-05-01'),
+(4, 'Inna','Sidorova',NEWID(),'38','2022-04-11')
+
+SELECT*
+FROM Patients
+
+Задание 8.
+Добавить поле TempType со следующими значениями ‘< 0°C’,  ‘> 0°C’ на основе значений из поля Temp ( используйте ALTER TABLE 
+ADD column AS ). Посмотрите на данные, которые получились.
+
+ALTER TABLE Patients
+ADD TempType AS
+CASE WHEN Temp <0 THEN '< 0°C'
+     WHEN Temp >0 THEN '> 0°C'
+	 END 
+
+Задание 9.
+Создать представление Patients_v, показывающее температуру в градусах Фаренгейта (°F = °Cx9/5 + 32)
+
+CREATE VIEW vPatients
+AS
+SELECT Temp AS TempC, (Temp*9/5 + 32) AS TempF
+FROM Patients
+
+SELECT*
+FROM vPatients
+
+Задание 10.
+Создать функцию, которая возвращает температуру в градусах Фаренгейта, при подаче на вход градусы в Цельсиях.
+
+CREATE FUNCTION udfPatients (
+@tempс FLOAT)
+RETURNS FLOAT
+AS
+BEGIN 
+RETURN (@tempс*9/5 + 32)
+END;
+
+
