@@ -1,0 +1,6 @@
+Well done!
+
+-0.5
+If you check NationalId data type, it will be varchar. You need to duplicate data types not to cause probelms with some other data inputs.
+
+Mark: 10
