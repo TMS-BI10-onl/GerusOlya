@@ -1,0 +1,15 @@
+Well done!
+
+A -1
+Correct answer: 0nf
+We can't store values like this.
+
+B
+If it's a 2nf we don't need to add pk. Your text and table answer are controversal.
+Also, educational number can be a PK itself.
+
+C -0.75
+It's not 1nf, it's 0nf. Values in cells can be divided.
+
+
+Mark: 8
