@@ -1,0 +1,9 @@
+Создать 2 таблицы, где первая - данные сына (таблица p), вторая-данные отца (таблица f),
+их заджоинить и выполнить следующее условие:
+
+
+SELECT CONCAT(p.LastName, ' ', p.FirstName, ' ', p.ParentName) as son, 
+CONCAT(f.LastName, ' ', f.FirstName, ' ', f.ParentName) as father
+FROM Person p
+     JOIN Father f ON p.ID_Father = f.ID_Father
+WHERE p.FirstName = 'Дмитрий' 
