@@ -1,0 +1,25 @@
+1) Найдите людей и их номера телефонов, код города которых начинается на  4 и заканчивается на 5.
+( таблицы Person.PersonPhone, Person.Person) 
+
+SELECT  pph.PhoneNumber, pp.FirstName, pp.LastName
+FROM Person.PersonPhone pph JOIN Person.Person pp ON pph.BusinessEntityID=pp.BusinessEntityID
+WHERE pph.PhoneNumber LIKE '4%5' 
+
+
+2) Отнести каждого человека из [HumanResources].[Employee] в свою возрастную категорию:
+Adolescence: 17-20
+Adults: 21-59
+Elderly: 60-75
+Senile: 76-90
+
+SELECT pp.FirstName, pp.LastName, hp.BirthDate, DATEDIFF( year, BirthDate, getDate() ) as Age
+FROM Person.Person pp JOIN HumanResources.Employee hp ON pp.BusinessEntityID=hp.BusinessEntityID
+ORDER BY Age DESC
+Надо сделать подзапрос с case чтобы задать условие, но не понимаю куда его вставить
+
+3) Вывести самый дорогой продукт для каждого цвета из [Production].[Product]
+
+SELECT MAX(StandardCost) AS max_cost, Color
+FROM Production.Product
+GROUP BY Color
+ORDER BY MAX(StandardCost) DESC 
