@@ -1,0 +1,75 @@
+SELECT * FROM data_for_merge
+SELECT * FROM data_for_merge2
+
+
+MERGE data_for_merge2 target                                  --(таблица в котор будут изменения)--
+USING data_for_merge source ON target.Function_name=source.a  --(соединение по натуральному ключу)--
+WHEN NOT MATCHED BY TARGET                                    --условие--
+	THEN INSERT (Function_name, Function_count)             
+	VALUES (source.a, 1);
+
+MERGE data_for_merge2 target
+USING data_for_merge source ON target.Function_name=source.b 
+WHEN MATCHED 
+     THEN UPDATE SET target.Function_count=source.Function_count   
+WHEN  NOT MATCHED BY TARGET 
+     THEN INSERT (Function_name, Function_count)
+     VALUES (source.b, 1);
+
+MERGE data_for_merge2 target
+USING data_for_merge source ON target.Function_name=source.c
+WHEN MATCHED 
+     THEN UPDATE SET target.Function_count=source.Function_count
+WHEN  NOT MATCHED BY TARGET
+      THEN INSERT (Function_name, Function_count)
+      VALUES (source.c, 1);
+
+MERGE data_for_merge2 target
+USING data_for_merge source ON target.Function_name=source.d
+WHEN MATCHED 
+     THEN UPDATE SET target.Function_count=source.Function_count
+WHEN  NOT MATCHED BY TARGET
+      THEN INSERT (Function_name, Function_count)
+      VALUES (source.d, 1);
+
+MERGE data_for_merge2 target
+USING data_for_merge source ON target.Function_name=source.e
+WHEN MATCHED 
+     THEN UPDATE SET target.Function_count=source.Function_count
+WHEN  NOT MATCHED BY TARGET
+      THEN INSERT (Function_name, Function_count)
+      VALUES (source.e, 1);
+
+MERGE data_for_merge2 target
+USING data_for_merge source ON target.Function_name=source.f
+WHEN MATCHED 
+     THEN UPDATE SET target.Function_count=source.Function_count
+WHEN  NOT MATCHED BY TARGET
+      THEN INSERT (Function_name, Function_count)
+      VALUES (source.f, 1);
+
+MERGE data_for_merge2 target
+USING data_for_merge source ON target.Function_name=source.g
+WHEN MATCHED 
+     THEN UPDATE SET target.Function_count=source.Function_count
+WHEN  NOT MATCHED BY TARGET
+      THEN INSERT (Function_name, Function_count)
+      VALUES (source.g, 1);
+
+MERGE data_for_merge2 target
+USING data_for_merge source ON target.Function_name=source.h
+WHEN MATCHED 
+     THEN UPDATE SET target.Function_count=source.Function_count
+WHEN  NOT MATCHED BY TARGET
+      THEN INSERT (Function_name, Function_count)
+      VALUES (source.h, 1);
+
+MERGE data_for_merge2 target
+USING data_for_merge source ON target.Function_name=source.i
+WHEN MATCHED 
+     THEN UPDATE SET target.Function_count=source.Function_count
+WHEN  NOT MATCHED BY TARGET
+      THEN INSERT (Function_name, Function_count)
+      VALUES (source.i, 1);
+
+SELECT * FROM data_for_merge2
