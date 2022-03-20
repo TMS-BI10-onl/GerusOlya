@@ -1,0 +1,31 @@
+1.Для своей базы данных создайте объект для нахождения общего рейтинга топ 50 продавцов за всю историю продаж, где рейтинг определяется количеством баллов за количество продаж в день (10 и более продаж – 3 балла, 5-10 – 2 балла, меньше 5 – 1 балл). 
+
+CREATE VIEW TopSalesperson AS
+WITH Source AS
+(SELECT  ds.SalespersonID, FirstName, LastName, OrderDate, COUNT(1) AS cnt,
+CASE 
+WHEN COUNT(1)>= 10 THEN 3
+WHEN COUNT(1)BETWEEN 5 AND 9 THEN 2
+WHEN COUNT(1)<5 THEN 1
+END AS Rating
+FROM dbo.Fct_Order fo JOIN dbo.Dim_Salesperson ds  ON fo.SalespersonID=ds.SalespersonID
+GROUP BY ds.SalespersonID, FirstName, LastName, OrderDate)
+SELECT TOP 50 WITH TIES SalespersonID, FirstName, LastName, SUM (Rating)
+as TRating
+FROM Source
+GROUP BY SalespersonID, FirstName, LastName
+ORDER BY TRating DESC;
+
+2.Изучите данные графики. Как можно улучшить каждый? Пришлите ваши предложения (текстом, реализовывать не надо), а позже разберем на занятии.
+
+1.1. Убрать цвет фона
+1.2. Убрать цвет фона диаграммы 
+1.3. Убрать подписи горизонтальной оси (так как есть легенда)
+1.4. Убрать тени
+1.5. Добавить значения данных (т.е. где столбцы)
+
+2.1. Убрать тени
+2.2. Убрать 3Д,т.е. конусы заменить столбцами
+2.3. Вывести легенду, убрать подписи конусов
+2.4. Сделать вертиукальную ось от 0
+
