@@ -1,0 +1,63 @@
+1.	Покажите всех менеджеров, которые имеют в подчинении больше 6-ти сотрудников.
+
+SELECT first_name, last_name, count(1) as cnt
+FROM departmets d JOIN employees e ON d.manager_id=e.manager_id
+GROUP BY first_name, last_name
+HAVING count(1)>6
+
+
+2.	Вывести min и max зарплату с вычетом commission_pct для каждого департамента. (commission_pct на базе указывается в процентах). 
+
+SELECT departmen_name, max(salary_cpct) as max_salary,min(salary_cpct) as min_salary
+FROM
+(
+SELECT departmen_id, salary-(salary*commision_pct/100) as salary_cpct
+FROM employees
+GROUP BY departmen_id
+)t
+GROUP BY departmen_name
+
+
+3.	Вывести только регион, где работают больше всего людей.
+
+SELECT TOP 1 WITH TIES region_name
+FROM 
+(
+SELECT r.region_name, COUNT(e.employee_id) as cnt
+FROM employees e 
+	JOIN departments d ON e.department_id=d.department_id
+	JOIN locations l ON d.location_id=l.location_id
+	JOIN countries c ON l.country_id=c.country_id
+	JOIN regions r ON c.region_id=r.region_id 
+GROUP BY r.region_name
+) t
+ORDER BY cnt 
+
+
+4.	Найдите разницу в процентах между средней зп по каждому департаменту от общей средней (по всем департаментам).
+
+SELECT department_name, (dep_avg_salary/avg_salary)*100 as dif_salary
+FROM 
+(
+SELECT d.department_id, AVG(salary) OVER() as avg_salary, AVG(salary) OVER (PARTITION BY department_id) AS dep_avg_salary
+FROM employees e JOIN departments d ON e.department_id=d.department_id
+)t
+
+
+5.	Найдите людей, кто проработал больше, чем 10 лет в одном департаменте. 
+
+SELECT first_name, last_name
+FROM job_history j JOIN employees e ON j.employee_id=e.employee_id
+WHERE DATEDIFF(YEAR,start_date, GETDATE())>10 
+
+
+6.	Найдите людей, кто занимает 5-10 место по размеру зарплаты.  
+
+SELECT first_name, last_name
+FROM
+(
+SELECT first_name, last_name, RANK() OVER (PARTITION BY first_name, last_name ORDER BY salary DESC) as rnk
+FROM employees
+GROUP BY first_name, last_name
+)t
+WHERE rnk BETWEEN 5 AND 10 
