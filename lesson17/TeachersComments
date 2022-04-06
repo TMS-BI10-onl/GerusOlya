@@ -1,0 +1,26 @@
+Well done!
+
+1. -0.25
+Departments is not needed here.
+
+2. -0.5
+Can be solved in one query.
+
+3. -0.5
+No need in the subquery. Count() can be used in the order by.
+
+4. -0.5
+Can be solved in one query.
+
+Mark: 8
+
+Test notes: 
+KPI Number of films - it should be count(distinct) - then the number will be correct.
+Bottom left table - no style.
+Header line is too large. No dividing lines between buttons.
+Count of movies -  Axis titles are not changed in style, but for some reason chnged the text.
+Graph titles are not changed in style.
+No borders.
+Financial table - no style, no chnges in column names.
+
+Test mark: 7
